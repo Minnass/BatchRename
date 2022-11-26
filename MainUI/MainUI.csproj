@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\add_item.png" />
+    <None Remove="Images\add_rule.png" />
+    <None Remove="Images\edit.png" />
+    <None Remove="Images\ic_delete_rule.png" />
+    <None Remove="Images\ic_move_to_bottom.png" />
+    <None Remove="Images\ic_move_to_next.png" />
+    <None Remove="Images\ic_move_to_prev.png" />
+    <None Remove="Images\ic_move_to_top.png" />
+    <None Remove="Images\ic_readme.png" />
+    <None Remove="Images\open_preset.png" />
+    <None Remove="Images\open_project.png" />
+    <None Remove="Images\play.png" />
+    <None Remove="Images\preview.png" />
+    <None Remove="Images\reset_item.png" />
+    <None Remove="Images\reset_rules.png" />
+    <None Remove="Images\save_preset.png" />
+    <None Remove="Images\save_project.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fluent.Ribbon" Version="9.0.4" />
+    <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BasicCore\BasicCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\add_rule.png" />
+    <Resource Include="Images\add_item.png" />
+    <Resource Include="Images\edit.png" />
+    <Resource Include="Images\ic_delete_rule.png" />
+    <Resource Include="Images\ic_move_to_bottom.png" />
+    <Resource Include="Images\ic_move_to_next.png" />
+    <Resource Include="Images\ic_move_to_prev.png" />
+    <Resource Include="Images\ic_move_to_top.png" />
+    <Resource Include="Images\ic_readme.png" />
+    <Resource Include="Images\open_preset.png" />
+    <Resource Include="Images\open_project.png" />
+    <Resource Include="Images\play.png" />
+    <Resource Include="Images\preview.png" />
+    <Resource Include="Images\reset_rules.png" />
+    <Resource Include="Images\reset_item.png" />
+    <Resource Include="Images\save_preset.png" />
+    <Resource Include="Images\save_project.png" />
+  </ItemGroup>
+
+</Project>
