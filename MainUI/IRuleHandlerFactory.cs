@@ -32,8 +32,17 @@ namespace MainUI
         }
         public IRuleHandler? parse(string ruleName)
         {
+            
+            if(_prototypes.ContainsKey(ruleName))
+            {
+                IRuleHandler rule = _prototypes[ruleName];
+                return (IRuleHandler)rule.Clone();
+            }
+            else
 
-            return null;
+            {
+                return null;
+            }
            
 
         }
@@ -51,7 +60,14 @@ namespace MainUI
             }
             return values;
         }
-       
+        public bool isExistRule(string nameRule)
+        {
+            if(_prototypes.ContainsKey(nameRule))
+            {
+                return true;    
+            }
+            return false;
+        }
      
 
     }

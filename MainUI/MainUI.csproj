@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="Fluent.Ribbon" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
   </ItemGroup>
 

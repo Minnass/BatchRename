@@ -3,9 +3,45 @@ using System;
 using System.DirectoryServices;
 using System.Linq;
 using System.Text;
+using System.Windows.Controls;
 
 namespace BatchRename
 {
+
+
+    public class SuffixRuleEditor
+    {
+        private const int SUFFIX_PARAMETER_POSTION = 0;
+
+        public delegate void prefixEditor(TypedParameter param);
+        public event prefixEditor editorEvent;
+
+        TypedParameter typedParameter { get; set; }
+        TextBlock textBlock = new TextBlock();
+        TextBox textBox = new TextBox();
+
+
+        public SuffixRuleEditor(TypedParameter parameter, StackPanel frame)
+        {
+            this.typedParameter = parameter;
+            textBlock.Text = "Suffix:";
+            textBox.Text = (typedParameter.inputStrings.Count == 0) ? string.Empty : typedParameter.inputStrings.ElementAt(SUFFIX_PARAMETER_POSTION);
+            textBox.TextChanged += textbox_change;
+            frame.Children.Add(textBlock);
+            frame.Children.Add(textBox);
+
+        }
+
+
+
+        private void textbox_change(object sender, EventArgs e)
+        {
+            typedParameter.inputStrings.Clear();
+            typedParameter.inputStrings.Add(textBox.Text);
+            editorEvent?.Invoke(typedParameter);
+        }
+
+    }
     public class AddingSuffixRule : Rule, IRuleHandler
     {
 
@@ -82,13 +118,26 @@ namespace BatchRename
             return true;
         }
 
-        public string catchException()
-        {
-            return String.Empty;
-        }
+
         public override string ToString()
         {
-            return getRuleType();
+            return "Adding Suffix Rule";
+        }
+
+        public void getEditor(StackPanel frame)
+        {
+            SuffixRuleEditor editor = new SuffixRuleEditor(this.parameter, frame);
+            editor.editorEvent += setParameter;
+        }
+
+        public string raiseParameterInputError()
+        {
+            return string.Empty;
+        }
+
+        public void Done()
+        {
+         //do nothing
         }
     }
 }

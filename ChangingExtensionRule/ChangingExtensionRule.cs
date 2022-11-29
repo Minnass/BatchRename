@@ -2,14 +2,44 @@ using BasicCore;
 using System;
 using System.Linq;
 using System.Text;
+using System.Windows.Controls;
 
 namespace BatchRename
 {
+
+    public class ChangingExtensionExtensionEditor
+    {
+        private const int NEW_EXTENSION_POSTION = 0;
+
+        public delegate void changingExtensionEditor(TypedParameter param);
+        public event changingExtensionEditor editorEvent;
+
+        TypedParameter typedParameter { get; set; }
+        TextBlock textBlock = new TextBlock();
+        TextBox textBox = new TextBox();
+        public ChangingExtensionExtensionEditor(TypedParameter parameter, StackPanel frame)
+        {
+            this.typedParameter = parameter;
+            textBlock.Text = "New Extension:";
+            textBox.Text = (typedParameter.inputStrings.Count == 0) ? "" : typedParameter.inputStrings.ElementAt(NEW_EXTENSION_POSTION);
+            textBox.TextChanged += textbox_change;
+            frame.Children.Add(textBlock);
+            frame.Children.Add(textBox);
+
+        }
+        private void textbox_change(object sender, EventArgs e)
+        {
+            typedParameter.inputStrings.Clear();
+            typedParameter.inputStrings.Add(textBox.Text);
+            editorEvent?.Invoke(typedParameter);
+        }
+
+    }
     public class ChangingExtensionRule : Rule, IRuleHandler
     {
         private const int NEW_EXTENSION_POSTION = 0;
         private string newExtension;
-        private const string ERROR = "Cannot change Extension Rule for folder";
+  
         public object Clone()
         {
             ChangingExtensionRule returnedObject = new ChangingExtensionRule();
@@ -50,21 +80,34 @@ namespace BatchRename
 
         public void HandleInputParameter()
         {
-            newExtension = parameter.inputStrings.ElementAt(NEW_EXTENSION_POSTION);
+            newExtension = (parameter.inputStrings.Count != 0) ? parameter.inputStrings.ElementAt(NEW_EXTENSION_POSTION) : string.Empty;
         }
 
         public bool isEditable()
         {
             return true;
         }
-        public string catchException()
-        {
-            return ERROR;
-        }
+
         public override string ToString()
         {
-            return getRuleType();
+            return "Changing Extension Rule";
         }
 
+        public void getEditor(StackPanel frame)
+        {
+            ChangingExtensionExtensionEditor editor = new ChangingExtensionExtensionEditor(this.parameter, frame);
+            editor.editorEvent += setParameter;
+
+        }
+
+        public string raiseParameterInputError()
+        {
+            return string.Empty;
+        }
+
+        public void Done()
+        {
+            //do nothing 
+        }
     }
 }

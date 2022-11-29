@@ -1,21 +1,28 @@
 using BasicCore;
 using System;
 using System.Text;
+using System.Windows.Controls;
 
 namespace BatchRename
 {
     public class ConvertingPascalcaseRule : Rule, IRuleHandler
     {
-        public string catchException()
-        {
-            return String.Empty;
-        }
 
         public object Clone()
         {
             ConvertingPascalcaseRule returnedObject = new ConvertingPascalcaseRule();
-            returnedObject.parameter = (TypedParameter)parameter;
+            returnedObject.setParameter((TypedParameter)parameter.Clone());
             return returnedObject;
+        }
+
+        public void Done()
+        {
+            //do nothing
+        }
+
+        public void getEditor(StackPanel frame)
+        {
+           //do nothing
         }
 
         public TypedParameter getParameter()
@@ -53,12 +60,17 @@ namespace BatchRename
 
         public void HandleInputParameter()
         {
-            throw new NotImplementedException();
+            //do nothing 
         }
 
         public bool isEditable()
         {
             return false;
+        }
+
+        public string raiseParameterInputError()
+        {
+            return String.Empty;
         }
 
         public void setParameter(TypedParameter parameter)
@@ -67,7 +79,7 @@ namespace BatchRename
         }
         public override string ToString()
         {
-            return getRuleType();
+            return "Converting Pascal Case Rule";
         }
     }
 }

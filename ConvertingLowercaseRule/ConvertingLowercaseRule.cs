@@ -3,21 +3,28 @@ using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security;
 using System.Text;
+using System.Windows.Controls;
 
 namespace BatchRename
 {
     public class ConvertingLowercaseRule : Rule, IRuleHandler
     {
-        public string catchException()
-        {
-            return String.Empty;
-        }
 
         public object Clone()
         {
             ConvertingLowercaseRule returnedObject=new ConvertingLowercaseRule();
-            returnedObject.parameter = parameter;
+            returnedObject.setParameter((TypedParameter)parameter.Clone());
             return returnedObject;
+        }
+
+        public void Done()
+        {
+            // do nothing
+        }
+
+        public void getEditor(StackPanel frame)
+        {
+           //do nothing
         }
 
         public TypedParameter getParameter()
@@ -63,13 +70,18 @@ namespace BatchRename
             return false;
         }
 
+        public string raiseParameterInputError()
+        {
+            return String.Empty;
+        }
+
         public void setParameter(TypedParameter parameter)
         {
-            throw new NotImplementedException();
+           //do nothing heres
         }
         public override string ToString()
         {
-            return getRuleType();
+            return "Converting Lower Case Rule";
         }
     }
 }

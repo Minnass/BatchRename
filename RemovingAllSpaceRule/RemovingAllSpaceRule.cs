@@ -1,22 +1,31 @@
 using BasicCore;
 using System;
 using System.Text;
+using System.Windows.Controls;
 
 namespace BatchRename
 {
+
+    
+
     public class RemovingAllSpaceRule : Rule, IRuleHandler
     {
-        public string catchException()
-        {
-            return String.Empty;
-        }
 
         public object Clone()
         {
             RemovingAllSpaceRule returnedObject = new RemovingAllSpaceRule();
-            returnedObject.parameter = (TypedParameter)parameter.Clone();
-
+            returnedObject.setParameter((TypedParameter)parameter.Clone());
             return returnedObject;
+        }
+
+        public void Done()
+        {
+          //Do nothing
+        }
+
+        public void getEditor(StackPanel frame)
+        {
+            //do nothing
         }
 
         public TypedParameter getParameter()
@@ -57,13 +66,18 @@ namespace BatchRename
            return false;
         }
 
+        public string raiseParameterInputError()
+        {
+           return String.Empty;
+        }
+
         public void setParameter(TypedParameter parameter)
         {
            //do nothing
         }
         public override string ToString()
         {
-            return getRuleType();
+            return "Removing All Space Rule";
         }
     }
 }

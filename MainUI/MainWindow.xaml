@@ -8,19 +8,23 @@
         mc:Ignorable="d"
         x:Name="window"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="450" Width="800"  Loaded="Window_Loaded"  SizeChanged="Window_SizeChanged">
+        Title="Batch Rename" Height="450" Width="800"  Loaded="Window_Loaded"  SizeChanged="Window_SizeChanged" ContentRendered="renderLastContent_Click" >
 
+    <Window.Resources>
+        <local:CHeckBoxConverter x:Key="checkboxConverter"/>
+    </Window.Resources>
     <StackPanel Orientation="Vertical">
-
+        
         <Fluent:Ribbon>
+
             <Fluent:RibbonTabItem Header="Home">
                 <Fluent:RibbonGroupBox Header="Project">
-                    <Fluent:Button Header="Open" Icon="/Images/open_project.png" LargeIcon="/Images/open_project.png" Padding="4,4,4,4" RenderOptions.BitmapScalingMode="HighQuality"/>
-                    <Fluent:Button Header="Save" Icon="/Images/save_project.png" LargeIcon="/Images/save_project.png" Padding="4,4,4,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <Fluent:Button Header="Open" Icon="/Images/open_project.png" LargeIcon="/Images/open_project.png" Padding="4,4,4,4" Click="loadProject_Click" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <Fluent:Button Header="Save" Icon="/Images/save_project.png" LargeIcon="/Images/save_project.png" Padding="4,4,4,0" Click="saveProject_Click" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Preset">
-                    <Fluent:Button Header="Open" Icon="/Images/open_preset.png" LargeIcon="/Images/open_preset.png" Padding="4,4,4,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                    <Fluent:Button Header="Save" Icon="/Images/save_preset.png" LargeIcon="/Images/open_preset.png" Padding="4,4,4,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <Fluent:Button Header="Open" Icon="/Images/open_preset.png" LargeIcon="/Images/open_preset.png" Click="OpenRule_Click"  Padding="4,4,4,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <Fluent:Button Header="Save" Icon="/Images/save_preset.png" LargeIcon="/Images/open_preset.png" Padding="4,4,4,0" Click="saveRule_Click" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Rename Rules">
                     <Fluent:ComboBox x:Name="rulesComboxBox" Width="200" Height="25" Margin="0, 12, 0, 0" Text="-- Choose a rule --">
@@ -45,8 +49,8 @@
                     <Fluent:Button  FontSize="10" Header="Reset Items" Icon="Images/reset_item.png" LargeIcon="Images/reset_item.png"  Padding="4, 4, 4, 0" Click="resetItem_Click"  RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Batch Actions">
-                    <Fluent:Button Header="Preview" Icon="Images/preview.png" LargeIcon="Images/preview.png" Padding="4, 4, 4, 0"  RenderOptions.BitmapScalingMode="HighQuality"/>
-                    <Fluent:Button Header="Start" Icon="Images/play.png" LargeIcon="Images/play.png" Padding="4, 4, 8, 0"  RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <Fluent:Button Header="Preview" Icon="Images/preview.png" LargeIcon="Images/preview.png" Padding="4, 4, 4, 0"  Click="preview_Click" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <Fluent:Button Header="Start" Icon="Images/play.png" LargeIcon="Images/play.png" Padding="4, 4, 8, 0" Click="start_Click" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Options">
@@ -97,41 +101,60 @@
                         <Image Source="Images/ic_delete_rule.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                     </Button>
                 </StackPanel>
-                <ListView SelectionMode="Extended" x:Name="chosenRules" Height="440" Width="240"  >
-                    <ListView.ItemTemplate>
+                <ListView    SelectionMode="Extended" x:Name="chosenRules" Height="440" Width="240" >
+                    <ListView.ItemTemplate >
                         <DataTemplate>
-                            <DockPanel   Width="230" Height="30" >
-                                <DockPanel.Style>
-                                    <Style TargetType="DockPanel">
-                                        <Setter Property="Background" Value="LightSlateGray"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ElementName=ruleCheckbox,Path=IsChecked }" Value="True">
-                                                <Setter Property="Background" Value="LightCoral"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </DockPanel.Style>
-                                <TextBlock DockPanel.Dock="Left" Text="{Binding}"  VerticalAlignment="Center" Margin="5,0,0,0" FontSize ="13"/>
+                            <Border CornerRadius="5"  Background="SkyBlue" Width="225">
 
+                                <Expander x:Name="expander" Header="{Binding}" >
 
-                                <Button IsEnabled="false" x:Name="editionButton"  Margin="10,0,5,0" DockPanel.Dock="Right" Background="Transparent"  Width="20" Height="20" BorderThickness="0" VerticalAlignment="Center">
-                                        
-                                        <Button.ToolTip>
-                                            <ToolTip Content="Edit options"/>
-                                        </Button.ToolTip>
-                                        <Image Source="Images/edit.png"/>
-                                    </Button>
-                                <CheckBox HorizontalAlignment="Right" BorderBrush="Yellow" DockPanel.Dock="Right" x:Name="ruleCheckbox" VerticalAlignment="Center"  />
-                             
+                                    <Expander.Style>
+                                        <Style TargetType="{x:Type Expander}">
+                                            <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="Green"/>
+                                                    </Trigger>
+                                            
 
-                            </DockPanel>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Expander.Style>
+                                    <Expander.HeaderTemplate >
+                                        <DataTemplate>
+                                            <Grid Width="220" Margin="2" >
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="3*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding}" Grid.Column="0"/>
+                                                <CheckBox x:Name="activeCheckbox" Unchecked="activateOrDisableRule_Click" Checked="activateOrDisableRule_Click" IsChecked="{Binding RelativeSource={RelativeSource
+                                                    AncestorType={x:Type Expander} },Mode=OneWay,
+                                                    Path=DataContext,Converter={StaticResource checkboxConverter}
+                                                    }"  Grid.Column="1"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </Expander.HeaderTemplate>
+                                    <Expander.ContentTemplate>
+
+                                        <DataTemplate>
+                                            <Border  Padding="10" Background="White" x:Name="ExpanderContent">
+                                                <StackPanel Loaded="expander_loading" />
+                                            </Border>
+
+                                        </DataTemplate>
+                                    </Expander.ContentTemplate>
+
+                                </Expander>
+                            </Border>
+
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+
             </StackPanel>
             <StackPanel Margin="10, 0, 0, 0" Orientation="Vertical" x:Name="itemsArea" >
                 <Label Content="Chosen Item(s)" Margin="8,0,0,0"/>
-                <ListView x:Name="chosenItems" Height="478" Margin="0,0,30,0"  VerticalAlignment="Top" SizeChanged="chosenItems_SizeChanged">
+                <ListView AllowDrop="True" Drop="DropItem" x:Name="chosenItems" Height="478" Margin="0,0,30,0"  VerticalAlignment="Top" SizeChanged="chosenItems_SizeChanged">
                     <ListView.Resources>
                         <ContextMenu x:Key="ItemContextMenu">
                             <MenuItem Header="Remove" Click="deleteItem_Click">
@@ -143,8 +166,13 @@
                     </ListView.Resources>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Current Name"  
-                                            DisplayMemberBinding="{Binding currentName}"/>
+                            <GridViewColumn Header="Current Name">
+                                <GridViewColumn.CellTemplate>
+                                    <ItemContainerTemplate>
+                                        <TextBlock  Text="{Binding currentName}"/>
+                                    </ItemContainerTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                             <GridViewColumn Header="New Name"  
                                             DisplayMemberBinding="{Binding newName}" />
                             <GridViewColumn Header="Path"  
@@ -156,11 +184,16 @@
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}" >
                             <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="Gray"/>
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>
             </StackPanel>
         </StackPanel>
- 
+
     </StackPanel>
 </Fluent:RibbonWindow>
