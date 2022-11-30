@@ -51,7 +51,7 @@ namespace BatchRename
 
             notion.Text = "(Multiple characters are separated by ',')";
             notion.FontSize = 10;
-  
+            newChacterInput.MaxLength = 1;
             newChacterInput.Text = (parameter.inputStrings[NEW_CHARACTER_POSTION].Equals(string.Empty)) ? string.Empty : parameter.inputStrings.ElementAt(NEW_CHARACTER_POSTION);
             removedCharacterInput.Text = (parameter.inputStrings[TOTAL_REPLACED_CHARACTERS_POSITION].Equals(string.Empty)) ? string.Empty : parameter.inputStrings.ElementAt(TOTAL_REPLACED_CHARACTERS_POSITION);
 
@@ -94,7 +94,7 @@ namespace BatchRename
         private void removedCharacter_change(object sender, EventArgs e)
         {
 
-            Regex validFormat = new Regex(@"([\w\d\s],)+[\w\d\s]$|[\w\d\s]$");
+            Regex validFormat = new Regex(@"\b([\w\d\s],)+[\w\d\s]$|[\w\d\s]$");
             if(!validFormat.IsMatch(removedCharacterInput.Text))
             {
                 parameter.inputStrings[TOTAL_REPLACED_CHARACTERS_POSITION] = string.Empty;

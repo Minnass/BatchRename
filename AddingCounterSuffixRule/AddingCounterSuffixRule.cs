@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -56,13 +57,7 @@ namespace BatchRename
             digitInput.TextChanged += digitInput_change;
             startInput.TextChanged+=startInput_change;
             stepInput.TextChanged += step_change;
-            InputScope scope = new InputScope();
-            InputScopeName scopeName = new InputScopeName();
-            scopeName.NameValue = InputScopeNameValue.Number;
-            scope.Names.Add(scopeName);
-            digitInput.InputScope = scope;
-            startInput.InputScope = scope;
-            stepInput.InputScope = scope;
+
             grid.Children.Add(digit);
             grid.Children.Add(start);
             grid.Children.Add(step);
@@ -87,20 +82,28 @@ namespace BatchRename
         }
         private void digitInput_change(object sender, EventArgs e)
         {
-            parameter.inputStrings[DIGITS_POSTION] = digitInput.Text;
-            editorEvent?.Invoke(parameter);
+              parameter.inputStrings[DIGITS_POSTION] = digitInput.Text;
+              editorEvent?.Invoke(parameter);
+
         }
         private void startInput_change(object sender, EventArgs e)
         {
-            parameter.inputStrings[START_INDEX_POSITION] = startInput.Text;
 
-            editorEvent?.Invoke(parameter);
+   
+                parameter.inputStrings[START_INDEX_POSITION] = startInput.Text;
+
+                editorEvent?.Invoke(parameter);
+
 
         }
         private void step_change(object sender, EventArgs e)
         {
-            parameter.inputStrings[STEP_POSTION]=stepInput.Text;
-            editorEvent?.Invoke(parameter);
+         
+     
+                parameter.inputStrings[STEP_POSTION] = stepInput.Text;
+                editorEvent?.Invoke(parameter);
+
+         
         }
     }
     public class AddingCounterSuffixRule : Rule, IRuleHandler
@@ -183,9 +186,19 @@ namespace BatchRename
 
         public void HandleInputParameter()
         {
-            numberOfDigits = (parameter.inputStrings.ElementAt(DIGITS_POSTION) != string.Empty) ? int.Parse(parameter.inputStrings.ElementAt(DIGITS_POSTION)) : -1;
-            startIndex = ( parameter.inputStrings.ElementAt(START_INDEX_POSITION) != string.Empty) ? int.Parse(parameter.inputStrings.ElementAt(START_INDEX_POSITION)) : -1;
-            step = ( parameter.inputStrings.ElementAt(STEP_POSTION) != string.Empty) ? int.Parse(parameter.inputStrings.ElementAt(STEP_POSTION)) : -1;
+            Regex validFormat = new Regex(@"^\d+$");
+            if (!validFormat.IsMatch(parameter.inputStrings[STEP_POSTION])
+                || !validFormat.IsMatch(parameter.inputStrings[START_INDEX_POSITION])
+                || !validFormat.IsMatch(parameter.inputStrings[DIGITS_POSTION]))
+            {
+                numberOfDigits = -1;
+                startIndex = -1;
+                step = -1;
+                return;
+            }
+            numberOfDigits = int.Parse(parameter.inputStrings.ElementAt(DIGITS_POSTION));
+            startIndex = int.Parse(parameter.inputStrings.ElementAt(START_INDEX_POSITION)) ;
+            step = int.Parse(parameter.inputStrings.ElementAt(STEP_POSTION));
             nextIndex = startIndex;
         }
 

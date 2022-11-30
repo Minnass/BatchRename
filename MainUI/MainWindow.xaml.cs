@@ -13,7 +13,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Text.Json;
 using System.Windows.Threading;
 using System.Windows.Media;
-using Microsoft.Extensions.Primitives;
+
 
 namespace MainUI
 {
@@ -27,16 +27,16 @@ namespace MainUI
         private BindingList<PresentedItem> selectedItems;
         private IRuleHandlerFactory IRuleHandlerFactory;
         private BindingList<IRuleHandler> selectedRules;
-        public  List<IRuleHandler> activeRules;
+        public List<IRuleHandler> activeRules;
         private BindingList<string> itemTypes;
-
+        DispatcherTimer dispatcherTimer = new DispatcherTimer();
         #region"Start project"
         public MainWindow()
         {
             InitializeComponent();
 
             CHeckBoxConverter cHeckBoxConverter = new CHeckBoxConverter { dataParent = this };
-           var objec= (CHeckBoxConverter)this.FindResource("checkboxConverter");
+            var objec = (CHeckBoxConverter)this.FindResource("checkboxConverter");
             objec.dataParent = this;
             selectedItems = new BindingList<PresentedItem>();
             selectedRules = new BindingList<IRuleHandler>();
@@ -52,10 +52,9 @@ namespace MainUI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //Auto saving project one time after 12 second 
-            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+
             dispatcherTimer.Tick += (s, ev) => saveProject(pathProjectSaving);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 2);
-            dispatcherTimer.Start();
 
             //Init collection of rules 
             Util.loadDllFile(DLLS_PATH, IRuleHandlerFactory);
@@ -144,7 +143,7 @@ namespace MainUI
             }
             int counter = 0;
 
-            if (typeComboBox.SelectedItem.ToString() == "File")
+            if (typeComboBox.SelectedItem.ToString() == "File" && onFolder.IsChecked == false)
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.Multiselect = true;
@@ -152,11 +151,7 @@ namespace MainUI
                 if (openFileDialog.ShowDialog() == true)
                 {
                     string[] files = openFileDialog.FileNames;
-
-
                     List<PresentedItem> newFilenames = new List<PresentedItem>();
-
-
                     foreach (var file in files)
                     {
                         newFilenames.Add(new PresentedItem
@@ -187,11 +182,64 @@ namespace MainUI
                     }
                     MessageBox.Show(counter + " files have been added.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-
-
-
             }
-            else if (typeComboBox.SelectedItem.ToString() == "Folder")
+            else if (typeComboBox.SelectedItem.ToString() == "File" && onFolder.IsChecked == true)
+            {
+                using var openFolderDialog = new CommonOpenFileDialog
+                {
+                    IsFolderPicker = true,
+                    Multiselect = false
+                };
+                if (openFolderDialog.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    List<PresentedItem> newFilenames = new List<PresentedItem>();
+                    var folder = openFolderDialog.FileName;
+
+                    Stack items_stack = new Stack();
+                    items_stack.Push(folder);
+                    while(items_stack.Count>0)
+                    {
+                        string item = items_stack.Pop() as string;
+                       var files= Directory.GetFiles(item);
+                        foreach (var file in files)
+                        {
+                            newFilenames.Add(new PresentedItem
+                            {
+                                currentName = Path.GetFileName(file),
+                                path = Path.GetFullPath(file),
+                                newName = String.Empty,
+                                error = String.Empty
+                            });
+                        }
+                        var folders = Directory.GetDirectories(item);
+                        foreach(var fd in folders)
+                        {
+                            items_stack.Push(fd);
+                        }
+                    }
+                   
+                    foreach (var newItem in newFilenames)
+                    {
+                        bool isExist = false;
+                        foreach (var item in selectedItems)
+                        {
+                            if (item.currentName == newItem.currentName && item.path == newItem.path)
+                            {
+                                isExist = true;
+                                break;
+                            }
+                        }
+                        if (!isExist)
+                        {
+                            selectedItems.Add(newItem);
+                            counter++;
+                        }
+                    }
+                    MessageBox.Show(counter + " files have been added.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+
+            else
             {
                 using var openFolderDialog = new CommonOpenFileDialog
                 {
@@ -242,6 +290,18 @@ namespace MainUI
         {
             selectedItems.Clear();
         }
+        private void enableOrDisableAutoSave(object sender, RoutedEventArgs e)
+        {
+            if (((System.Windows.Controls.CheckBox)sender).IsChecked == true)
+            {
+                dispatcherTimer.Start();
+            }
+            else
+            {
+                dispatcherTimer.Stop();
+            }
+        }
+
         #endregion
 
         #region "Handle something on Item listview"
@@ -259,9 +319,13 @@ namespace MainUI
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] items = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if(typeComboBox.SelectedItem==null)
+                {
+                    return;
+                }
                 foreach (string item in items)
                 {
-                    if (typeComboBox.SelectedItem.ToString() == "File")
+                    if (typeComboBox.SelectedItem.ToString() == "File"&&onFolder.IsChecked==false)
                     {
                         if (File.Exists(Path.GetFullPath(item)))
                         {
@@ -272,7 +336,7 @@ namespace MainUI
                             });
                         }
                     }
-                    else if (typeComboBox.SelectedItem.ToString() == "Folder")
+                    else if (typeComboBox.SelectedItem.ToString() == "Folder"&&onFolder.IsChecked==false)
                     {
                         if (Directory.Exists(Path.GetFullPath(item)))
                         {
@@ -339,7 +403,6 @@ namespace MainUI
                     selectedRules[i] = selectedRules[i + 1];
                 }
                 selectedRules[selectedRules.Count - 1] = temp;
-
             }
 
         }
@@ -359,7 +422,7 @@ namespace MainUI
                     {
                         activeRules.Remove((IRuleHandler)item);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
 
                     }
@@ -394,7 +457,7 @@ namespace MainUI
                 activeRules.Remove(ruleHandler);
             }
 
-            Debug.WriteLine(activeRules.Count + " " + selectedRules.Count);
+            Debug.WriteLine("Active:" + activeRules.Count + "  Selected:" + selectedRules.Count);
         }
         #endregion
 
@@ -541,7 +604,7 @@ namespace MainUI
                 return;
             }
 
-            foreach(var item in selectedItems)
+            foreach (var item in selectedItems)
             {
                 item.error = string.Empty;
             }
@@ -709,6 +772,19 @@ namespace MainUI
                             }
                             else if (typeComboBox.SelectedItem.ToString().Equals("Folder"))
                             {
+                                try
+                                {
+                                    string sourceDirectory = item.path;
+                                    string targetDirectory = targetPath + "/" + item.newName;
+                                    DirectoryInfo sourceDircetory = new DirectoryInfo(sourceDirectory);
+                                    DirectoryInfo targetDircetory = new DirectoryInfo(targetDirectory);
+                                    Util.CopyAll(sourceDircetory, targetDircetory);
+
+                                }
+                                catch (Exception ex)
+                                {
+
+                                }
                                 // dasdadadsadasdsadasdsadsadadsadsadasdsadsadsadsadsadsadsadsdad
                             }
                             item.currentName = item.newName;
@@ -938,5 +1014,7 @@ namespace MainUI
         }
 
         #endregion
+
+
     }
 }

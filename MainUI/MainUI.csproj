@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Remove="Images\add_item.png" />
     <None Remove="Images\add_rule.png" />
+    <None Remove="Images\application.ico" />
     <None Remove="Images\edit.png" />
     <None Remove="Images\ic_delete_rule.png" />
     <None Remove="Images\ic_move_to_bottom.png" />
@@ -40,6 +41,7 @@
   <ItemGroup>
     <Resource Include="Images\add_rule.png" />
     <Resource Include="Images\add_item.png" />
+    <Resource Include="Images\application.ico" />
     <Resource Include="Images\edit.png" />
     <Resource Include="Images\ic_delete_rule.png" />
     <Resource Include="Images\ic_move_to_bottom.png" />

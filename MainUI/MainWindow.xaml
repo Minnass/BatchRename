@@ -7,26 +7,87 @@
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"               
         mc:Ignorable="d"
         x:Name="window"
-        WindowStartupLocation="CenterScreen"
+                     Icon="Images/application.ico"
+        MinWidth="600"
+        MinHeight="300"
+        WindowStartupLocation="CenterScreen"    
+        
         Title="Batch Rename" Height="450" Width="800"  Loaded="Window_Loaded"  SizeChanged="Window_SizeChanged" ContentRendered="renderLastContent_Click" >
 
     <Window.Resources>
+        <local:CheckBoxConverter2 x:Key="checkboxConverter2"/>
+
         <local:CHeckBoxConverter x:Key="checkboxConverter"/>
+        <Style TargetType="CheckBox" x:Key="sliderButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Vertical">
+                            <Grid >
+                                <Border Width="40" Height="25" Background="LightGray" CornerRadius="10" Margin="5,0"></Border>
+                                <Border x:Name="button" Height="25" Width="25" CornerRadius="20" HorizontalAlignment="Left"  ></Border>
+                            </Grid>
+                            <ContentPresenter x:Name="content" HorizontalAlignment="Center" Margin="0,0,0,0" Content="{TemplateBinding Content}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="right">
+                                <ThicknessAnimation Storyboard.TargetProperty="Margin" Storyboard.TargetName="button" Duration="0:0:0.4" From="0,0,0,0" To="25,0,0,0" >
+                                    <ThicknessAnimation.EasingFunction>
+                                        <CircleEase EasingMode="EaseOut"/>
+                                    </ThicknessAnimation.EasingFunction>
+                                </ThicknessAnimation>
+                            </Storyboard>
+                            <Storyboard x:Key="left">
+                                <ThicknessAnimation Storyboard.TargetProperty="Margin" Storyboard.TargetName="button" Duration="0:0:0.4" From="25,0,0,0" To="0,0,0,0" >
+                                    <ThicknessAnimation.EasingFunction>
+                                        <CircleEase EasingMode="EaseOut"/>
+                                    </ThicknessAnimation.EasingFunction>
+                                </ThicknessAnimation>
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="false">
+                                <Trigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="leftt"></RemoveStoryboard>
+                                    <BeginStoryboard Storyboard="{StaticResource right}" x:Name="rightt" ></BeginStoryboard>
+                                </Trigger.ExitActions>
+                                <Setter TargetName="button" Property="Background" Value="#757575"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Trigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="rightt"></RemoveStoryboard>
+                                    <BeginStoryboard Storyboard="{StaticResource left}" x:Name="leftt" ></BeginStoryboard>
+                                </Trigger.ExitActions>
+                                <Setter TargetName="button" Property="Background" Value="Blue"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Window.Resources>
-    <StackPanel Orientation="Vertical">
-        
-        <Fluent:Ribbon>
+    <StackPanel Orientation="Vertical" Background="White">
+
+        <Fluent:Ribbon >
 
             <Fluent:RibbonTabItem Header="Home">
                 <Fluent:RibbonGroupBox Header="Project">
-                    <Fluent:Button Header="Open" Icon="/Images/open_project.png" LargeIcon="/Images/open_project.png" Padding="4,4,4,4" Click="loadProject_Click" RenderOptions.BitmapScalingMode="HighQuality"/>
-                    <Fluent:Button Header="Save" Icon="/Images/save_project.png" LargeIcon="/Images/save_project.png" Padding="4,4,4,0" Click="saveProject_Click" RenderOptions.BitmapScalingMode="HighQuality"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Fluent:Button Header="Open" Icon="/Images/open_project.png" LargeIcon="/Images/open_project.png" Padding="4,4,4,4" Click="loadProject_Click" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        <Fluent:Button Header="Save" Icon="/Images/save_project.png" LargeIcon="/Images/save_project.png" Padding="4,4,4,0" Click="saveProject_Click" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        <CheckBox Unchecked="enableOrDisableAutoSave" Checked="enableOrDisableAutoSave" Style="{StaticResource sliderButton}" VerticalAlignment="Top" Margin="5,15,5,5" Content="Auto Save"/>
+                    </StackPanel>
+
+
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Preset">
                     <Fluent:Button Header="Open" Icon="/Images/open_preset.png" LargeIcon="/Images/open_preset.png" Click="OpenRule_Click"  Padding="4,4,4,0" RenderOptions.BitmapScalingMode="HighQuality"/>
                     <Fluent:Button Header="Save" Icon="/Images/save_preset.png" LargeIcon="/Images/open_preset.png" Padding="4,4,4,0" Click="saveRule_Click" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Rename Rules">
+
                     <Fluent:ComboBox x:Name="rulesComboxBox" Width="200" Height="25" Margin="0, 12, 0, 0" Text="-- Choose a rule --">
                         <Fluent:ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -34,17 +95,24 @@
                             </DataTemplate>
                         </Fluent:ComboBox.ItemTemplate>
                     </Fluent:ComboBox>
+
+
                     <Fluent:Button FontSize="10" Header="Add Rules" Icon="/Images/add_rule.png" LargeIcon="/Images/add_rule.png" Padding="4, 4, 4, 0" Click="addRule_Click" RenderOptions.BitmapScalingMode="HighQuality"/>
                     <Fluent:Button  FontSize="10" Header="Reset Rules" Icon="Images/reset_rules.png" LargeIcon="Images/reset_rules.png" Padding="4, 4, 4, 0" Click="resetRule_Click" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Items Actions">
-                    <Fluent:ComboBox x:Name="typeComboBox" Width="150" Height="25" Margin="0, 12, 0, 0" Text="-- Choose items type --" SelectionChanged="typeSelectionChanged">
-                        <Fluent:ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}"/>
-                            </DataTemplate>
-                        </Fluent:ComboBox.ItemTemplate>
-                    </Fluent:ComboBox>
+                    <StackPanel Orientation="Vertical">
+                        <Fluent:ComboBox x:Name="typeComboBox" Width="150" Height="25" Margin="0, 12, 0, 0" Text="-- Choose items type --" SelectionChanged="typeSelectionChanged">
+                            <Fluent:ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"/>
+                                </DataTemplate>
+                            </Fluent:ComboBox.ItemTemplate>
+                        </Fluent:ComboBox>
+                        <CheckBox x:Name="onFolder"
+                                  IsChecked="{Binding Mode=OneWay, ElementName=typeComboBox, Path=SelectedItem,Converter={StaticResource checkboxConverter2}}" IsEnabled="{Binding ElementName=typeComboBox, Path=SelectedItem,Converter={StaticResource checkboxConverter2}}"
+                                  Content="Find on Folder" Margin="8,8,0,0"  HorizontalAlignment="Left"/>
+                    </StackPanel>
                     <Fluent:Button  FontSize="10" Header="Add Items" Icon="/Images/add_item.png" LargeIcon="/Images/add_item.png" Padding="4, 4, 4, 0" Click="AddItem_Click"  RenderOptions.BitmapScalingMode="HighQuality" />
                     <Fluent:Button  FontSize="10" Header="Reset Items" Icon="Images/reset_item.png" LargeIcon="Images/reset_item.png"  Padding="4, 4, 4, 0" Click="resetItem_Click"  RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Fluent:RibbonGroupBox>
@@ -111,10 +179,10 @@
                                     <Expander.Style>
                                         <Style TargetType="{x:Type Expander}">
                                             <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Background" Value="Green"/>
-                                                    </Trigger>
-                                            
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="Green"/>
+                                                </Trigger>
+
 
                                             </Style.Triggers>
                                         </Style>
@@ -177,7 +245,7 @@
                                             DisplayMemberBinding="{Binding newName}" />
                             <GridViewColumn Header="Path"  
                                             DisplayMemberBinding="{Binding path}" />
-                            <GridViewColumn Header="Result" 
+                            <GridViewColumn Header="Error" 
                                             DisplayMemberBinding="{Binding error}" />
                         </GridView>
                     </ListView.View>
@@ -194,6 +262,5 @@
                 </ListView>
             </StackPanel>
         </StackPanel>
-
     </StackPanel>
 </Fluent:RibbonWindow>

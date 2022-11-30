@@ -37,6 +37,10 @@ namespace BatchRename
     }
     public class ChangingExtensionRule : Rule, IRuleHandler
     {
+        public ChangingExtensionRule()
+        {
+            newExtension = String.Empty;
+        }
         private const int NEW_EXTENSION_POSTION = 0;
         private string newExtension;
   
@@ -102,6 +106,10 @@ namespace BatchRename
 
         public string raiseParameterInputError()
         {
+            if(newExtension.Equals(string.Empty))
+            {
+                return "Invalid parameter input.";
+            }
             return string.Empty;
         }
 

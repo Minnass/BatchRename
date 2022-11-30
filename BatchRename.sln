@@ -3,25 +3,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicCore", "BasicCore\BasicCore.csproj", "{5EDC5296-BD7B-42C3-ABD4-68A117D62474}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicCore", "BasicCore\BasicCore.csproj", "{5EDC5296-BD7B-42C3-ABD4-68A117D62474}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainUI", "MainUI\MainUI.csproj", "{CAF67907-492E-45E4-8369-74553A1A9E75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainUI", "MainUI\MainUI.csproj", "{CAF67907-492E-45E4-8369-74553A1A9E75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddingSuffixRule", "AddingSuffixRule\AddingSuffixRule.csproj", "{468761BC-1D09-432B-90A8-99E2AD10C68C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddingSuffixRule", "AddingSuffixRule\AddingSuffixRule.csproj", "{468761BC-1D09-432B-90A8-99E2AD10C68C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddingPrefixRule", "AddingPrefixRule\AddingPrefixRule.csproj", "{7B748F02-AB3D-4EED-98F1-DF8F177750B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddingPrefixRule", "AddingPrefixRule\AddingPrefixRule.csproj", "{7B748F02-AB3D-4EED-98F1-DF8F177750B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddingCounterSuffixRule", "AddingCounterSuffixRule\AddingCounterSuffixRule.csproj", "{38D55BE7-05F5-421C-A55C-80BBB6C0552E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddingCounterSuffixRule", "AddingCounterSuffixRule\AddingCounterSuffixRule.csproj", "{38D55BE7-05F5-421C-A55C-80BBB6C0552E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChangingExtensionRule", "ChangingExtensionRule\ChangingExtensionRule.csproj", "{ED5F93FE-BBA0-408B-B2F9-EFE7EAB8F6CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChangingExtensionRule", "ChangingExtensionRule\ChangingExtensionRule.csproj", "{ED5F93FE-BBA0-408B-B2F9-EFE7EAB8F6CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemovingAllSpaceRule", "RemovingAllSpaceRule\RemovingAllSpaceRule.csproj", "{CA413011-119D-4305-A341-AF7288CAE19D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemovingAllSpaceRule", "RemovingAllSpaceRule\RemovingAllSpaceRule.csproj", "{CA413011-119D-4305-A341-AF7288CAE19D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReplacingCharacterRule", "ReplacingCharacterRule\ReplacingCharacterRule.csproj", "{D840A3C8-0BD9-43AE-A0F4-CE0D79841BFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReplacingCharacterRule", "ReplacingCharacterRule\ReplacingCharacterRule.csproj", "{D840A3C8-0BD9-43AE-A0F4-CE0D79841BFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConvertingLowercaseRule", "ConvertingLowercaseRule\ConvertingLowercaseRule.csproj", "{49792D84-01D2-489F-9BB5-4C46B5FBC52F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConvertingLowercaseRule", "ConvertingLowercaseRule\ConvertingLowercaseRule.csproj", "{49792D84-01D2-489F-9BB5-4C46B5FBC52F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConvertingPascalcaseRule", "ConvertingPascalcaseRule\ConvertingPascalcaseRule.csproj", "{66510E99-C38E-4DDF-ABAA-98FBF5F5AE94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConvertingPascalcaseRule", "ConvertingPascalcaseRule\ConvertingPascalcaseRule.csproj", "{66510E99-C38E-4DDF-ABAA-98FBF5F5AE94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReplacingNewName", "ReplacingNewName\ReplacingNewName.csproj", "{8B6C8AB2-B8DB-4F34-B167-FE492A8D6DC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{66510E99-C38E-4DDF-ABAA-98FBF5F5AE94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66510E99-C38E-4DDF-ABAA-98FBF5F5AE94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66510E99-C38E-4DDF-ABAA-98FBF5F5AE94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B6C8AB2-B8DB-4F34-B167-FE492A8D6DC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B6C8AB2-B8DB-4F34-B167-FE492A8D6DC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B6C8AB2-B8DB-4F34-B167-FE492A8D6DC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B6C8AB2-B8DB-4F34-B167-FE492A8D6DC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

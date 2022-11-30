@@ -58,7 +58,7 @@ namespace BatchRename
         }
         public AddingSuffixRule()
         {
-            suffixParameter = "";
+            suffixParameter = string.Empty;
         }
 
         public TypedParameter getParameter()

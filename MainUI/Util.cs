@@ -17,8 +17,25 @@ using System.Windows.Markup;
 namespace MainUI
 {
 
+
     internal class Util
     {
+        public static void CopyAll(DirectoryInfo source, DirectoryInfo target)
+        {
+            Directory.CreateDirectory(target.FullName);
+            foreach (FileInfo fi in source.GetFiles())
+            {
+                Console.WriteLine(@"Copying {0}\{1}", target.FullName, fi.Name);
+                fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
+            }
+            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+            {
+                DirectoryInfo nextTargetSubDir =
+                target.CreateSubdirectory(diSourceSubDir.Name);
+                CopyAll(diSourceSubDir, nextTargetSubDir);
+            }
+        }
+
         static char[] invalidExtensionCharacters =
           {
                  '<',
@@ -149,26 +166,26 @@ namespace MainUI
             {
                 return "Empty name";
             }
-            
-  
-            if(isFileType)
+
+
+            if (isFileType)
             {
                 string[] subsString = fileName.Split(".", StringSplitOptions.None);
                 string name = subsString[0];
-                string extension=subsString[1]; 
-                foreach(var character in invalidExtensionCharacters)
+                string extension = subsString[1];
+                foreach (var character in invalidExtensionCharacters)
                 {
-                    if(name.Contains(character)||extension.Contains(character))
+                    if (name.Contains(character) || extension.Contains(character))
                     {
                         return $"Contain invalid {character}";
-                   
+
                     }
                 }
-                if(invalidName.Contains(name))
+                if (invalidName.Contains(name))
                 {
                     return $"{name} is invalid name";
                 }
-                if(name.Length>255)
+                if (name.Length > 255)
                 {
                     return "Name too long";
                 }
@@ -180,7 +197,7 @@ namespace MainUI
                     if (fileName.Contains(character))
                     {
                         return $"Contain invalid {character}";
-                      
+
                     }
 
                 }
@@ -188,7 +205,7 @@ namespace MainUI
                 {
                     return $"{fileName} is invalid name";
                 }
-                if(fileName.Length>255)
+                if (fileName.Length > 255)
                 {
                     return "name too long";
                 }
@@ -197,13 +214,13 @@ namespace MainUI
         }
     }
 
-   public class CHeckBoxConverter:IValueConverter
+    public class CHeckBoxConverter : IValueConverter
     {
         public MainWindow dataParent { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-          
+
             IRuleHandler ruleHandler = (IRuleHandler)value;
             foreach (var rule in dataParent.activeRules)
             {
@@ -220,6 +237,23 @@ namespace MainUI
             return (bool)false;
         }
 
-   
     }
+
+    public class CheckBoxConverter2 : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value!=null&&value.ToString().Equals("File"))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
 }
