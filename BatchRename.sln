@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConvertingLowercaseRule", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConvertingPascalcaseRule", "ConvertingPascalcaseRule\ConvertingPascalcaseRule.csproj", "{66510E99-C38E-4DDF-ABAA-98FBF5F5AE94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReplacingNewName", "ReplacingNewName\ReplacingNewName.csproj", "{8B6C8AB2-B8DB-4F34-B167-FE492A8D6DC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReplacingNewName", "ReplacingNewName\ReplacingNewName.csproj", "{8B6C8AB2-B8DB-4F34-B167-FE492A8D6DC0}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{27D75741-D287-480F-937D-06791D7C7ECC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,8 @@ Global
 		{8B6C8AB2-B8DB-4F34-B167-FE492A8D6DC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B6C8AB2-B8DB-4F34-B167-FE492A8D6DC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B6C8AB2-B8DB-4F34-B167-FE492A8D6DC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27D75741-D287-480F-937D-06791D7C7ECC}.Debug|Any CPU.ActiveCfg = Debug
+		{27D75741-D287-480F-937D-06791D7C7ECC}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

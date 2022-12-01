@@ -86,6 +86,7 @@ namespace BatchRename
             builder.Append(newName);
             if(isFileType)
             {
+                builder.Append(".");
             builder.Append(subStrings[1]);
             }
             string result=builder.ToString();

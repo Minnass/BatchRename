@@ -7,11 +7,10 @@
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"               
         mc:Ignorable="d"
         x:Name="window"
-                     Icon="Images/application.ico"
+        Icon="Images/icon.ico"
         MinWidth="600"
         MinHeight="300"
         WindowStartupLocation="CenterScreen"    
-        
         Title="Batch Rename" Height="450" Width="800"  Loaded="Window_Loaded"  SizeChanged="Window_SizeChanged" ContentRendered="renderLastContent_Click" >
 
     <Window.Resources>

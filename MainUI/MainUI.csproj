@@ -5,13 +5,14 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Images\add_item.png" />
     <None Remove="Images\add_rule.png" />
-    <None Remove="Images\application.ico" />
     <None Remove="Images\edit.png" />
+    <None Remove="Images\icon.ico" />
     <None Remove="Images\ic_delete_rule.png" />
     <None Remove="Images\ic_move_to_bottom.png" />
     <None Remove="Images\ic_move_to_next.png" />
@@ -29,6 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Fluent.Ribbon" Version="9.0.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
@@ -41,8 +46,8 @@
   <ItemGroup>
     <Resource Include="Images\add_rule.png" />
     <Resource Include="Images\add_item.png" />
-    <Resource Include="Images\application.ico" />
     <Resource Include="Images\edit.png" />
+    <Resource Include="Images\icon.ico" />
     <Resource Include="Images\ic_delete_rule.png" />
     <Resource Include="Images\ic_move_to_bottom.png" />
     <Resource Include="Images\ic_move_to_next.png" />

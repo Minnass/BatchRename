@@ -15,6 +15,7 @@ using System.Windows.Threading;
 using System.Windows.Media;
 
 
+
 namespace MainUI
 {
     /// <summary>
@@ -22,7 +23,7 @@ namespace MainUI
     /// </summary>
     public partial class MainWindow : RibbonWindow
     {
-        private string pathProjectSaving = AppDomain.CurrentDomain.BaseDirectory + @"../../../project.proj";
+        private string pathProjectSaving = AppDomain.CurrentDomain.BaseDirectory + @"lastWorking/project.proj";
         private const string DLLS_PATH = "rules/*.dll";
         private BindingList<PresentedItem> selectedItems;
         private IRuleHandlerFactory IRuleHandlerFactory;
@@ -72,10 +73,30 @@ namespace MainUI
         {
             if (File.Exists(pathProjectSaving))
             {
-                var result = MessageBox.Show("Do you want to continue with lately project? ", "Autosave Detected", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.OK);
-                if (MessageBoxResult.Yes == result)
+                try
                 {
-                    loadProject(pathProjectSaving);
+                    ProjectJsonFormat projectJsonFormat = new ProjectJsonFormat();
+                    StreamReader reader = new StreamReader(pathProjectSaving);
+                    string json = reader.ReadToEnd();
+                    projectJsonFormat = JsonSerializer.Deserialize<ProjectJsonFormat>(json);
+                    if (projectJsonFormat.presentedJsonFormat.Count==0&&
+                        projectJsonFormat.ruleJsonFormats.Count==0&&
+                        projectJsonFormat.type.Equals(string.Empty))
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        var result = MessageBox.Show("Do you want to continue with lately project? ", "Autosave Detected", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.OK);
+                        if (MessageBoxResult.Yes == result)
+                        {
+                            loadProject(pathProjectSaving);
+                        }
+                    }
+                }
+                catch (Exception exception)
+                {
+
                 }
             }
         }
@@ -197,10 +218,10 @@ namespace MainUI
 
                     Stack items_stack = new Stack();
                     items_stack.Push(folder);
-                    while(items_stack.Count>0)
+                    while (items_stack.Count > 0)
                     {
                         string item = items_stack.Pop() as string;
-                       var files= Directory.GetFiles(item);
+                        var files = Directory.GetFiles(item);
                         foreach (var file in files)
                         {
                             newFilenames.Add(new PresentedItem
@@ -212,12 +233,12 @@ namespace MainUI
                             });
                         }
                         var folders = Directory.GetDirectories(item);
-                        foreach(var fd in folders)
+                        foreach (var fd in folders)
                         {
                             items_stack.Push(fd);
                         }
                     }
-                   
+
                     foreach (var newItem in newFilenames)
                     {
                         bool isExist = false;
@@ -319,13 +340,13 @@ namespace MainUI
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] items = (string[])e.Data.GetData(DataFormats.FileDrop);
-                if(typeComboBox.SelectedItem==null)
+                if (typeComboBox.SelectedItem == null)
                 {
                     return;
                 }
                 foreach (string item in items)
                 {
-                    if (typeComboBox.SelectedItem.ToString() == "File"&&onFolder.IsChecked==false)
+                    if (typeComboBox.SelectedItem.ToString() == "File" && onFolder.IsChecked == false)
                     {
                         if (File.Exists(Path.GetFullPath(item)))
                         {
@@ -336,7 +357,7 @@ namespace MainUI
                             });
                         }
                     }
-                    else if (typeComboBox.SelectedItem.ToString() == "Folder"&&onFolder.IsChecked==false)
+                    else if (typeComboBox.SelectedItem.ToString() == "Folder" && onFolder.IsChecked == false)
                     {
                         if (Directory.Exists(Path.GetFullPath(item)))
                         {
@@ -1010,9 +1031,7 @@ namespace MainUI
                 selectedItems.Clear();
                 loadProject(openFileDialog.FileName);
             }
-
         }
-
         #endregion
 
 
